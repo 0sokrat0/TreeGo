@@ -10,8 +10,10 @@ if (-not (Test-Path -Path $INSTALL_DIR)) {
     Write-Host "📁 Created installation directory: $INSTALL_DIR"
 }
 
-# Скачиваем бинарник
+# Временный файл для скачивания
 $tempFile = Join-Path $env:TEMP $BIN_NAME
+
+# Скачиваем бинарник
 try {
     Write-Host "⏳ Downloading latest release..."
     if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
@@ -22,8 +24,9 @@ try {
     }
     
     if (-not (Test-Path -Path $tempFile)) {
-        throw "Download failed"
+        throw "Download failed. File not found: $tempFile"
     }
+    Write-Host "✅ Downloaded successfully!"
 }
 catch {
     Write-Host "❌ Error downloading binary: $_"
@@ -58,16 +61,16 @@ else {
     Write-Host "ℹ️ Installation directory already in PATH"
 }
 
-# Финальная проверка
+# Финальная проверка установки
 try {
     $version = & (Join-Path $INSTALL_DIR $BIN_NAME) --version
     Write-Host "🎉 Successfully installed TreeGo $version"
-    Write-Host "`nUsage example:"
+    Write-Host "`n📌 Usage example:"
     Write-Host "  treego --help"
     Write-Host "  treego ./your-project"
 }
 catch {
-    Write-Host "⚠️ Installation complete but verification failed!"
-    Write-Host "Please try restarting your terminal or run:"
+    Write-Host "⚠️ Installation complete, but verification failed!"
+    Write-Host "Please try restarting your terminal or run manually:"
     Write-Host "  $((Join-Path $INSTALL_DIR $BIN_NAME)) --help"
 }
