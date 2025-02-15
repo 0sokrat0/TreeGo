@@ -1,0 +1,27 @@
+project_name: treego
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+archives:
+  - format: binary
+    name_template: "treego-{{ .Os }}-{{ .Arch }}"
+checksum:
+  name_template: "checksums.txt"
+release:
+  github:
+    owner: 0sokrat0
+    name: TreeGo
