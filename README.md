@@ -48,8 +48,12 @@ sudo mv treego /usr/local/bin/
 ```
 
 #### 🖥️ Windows:
-Download **`treego.exe`** from the [releases](https://github.com/0sokrat0/TreeGo/releases/latest/).
 
+
+##### PowerShell
+```ps
+irm https://raw.githubusercontent.com/0sokrat0/TreeGo/main/scripts/install.ps1 | iex
+```
 ---
 
 ## 🚀 Usage
