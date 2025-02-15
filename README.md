@@ -52,7 +52,7 @@ sudo mv treego /usr/local/bin/
 
 ##### PowerShell
 ```ps
-irm https://raw.githubusercontent.com/0sokrat0/TreeGo/main/scripts/install.ps1 | iex
+irm https://github.com/0sokrat0/TreeGo/blob/master/scripts/install.ps1 | iex
 ```
 ---
 
