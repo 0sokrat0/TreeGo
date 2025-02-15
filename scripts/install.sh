@@ -2,19 +2,28 @@
 set -e
 
 BIN_NAME="treego"
+INSTALL_DIR="/usr/local/bin"
 REPO_URL="https://github.com/0sokrat0/TreeGo"
 
-# Detect OS and Arch
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+ARCH=$(uname -m)
 
-# Download URL
+# Преобразование архитектуры
+if [[ "$ARCH" == "x86_64" ]]; then
+    ARCH="amd64"
+elif [[ "$ARCH" == "aarch64" || "$ARCH" == "armv8" ]]; then
+    ARCH="arm64"
+else
+    echo "❌ Unsupported architecture: $ARCH"
+    exit 1
+fi
+
 DOWNLOAD_URL="$REPO_URL/releases/latest/download/treego-$OS-$ARCH"
 
 echo "🚀 Installing TreeGo..."
 curl -L -o $BIN_NAME $DOWNLOAD_URL
 chmod +x $BIN_NAME
-sudo mv $BIN_NAME /usr/local/bin/
+sudo mv $BIN_NAME $INSTALL_DIR/
 
-echo "✅ Installed: $(which $BIN_NAME)"
-echo "Try: treego --help"
+echo "✅ Installed in: $INSTALL_DIR/$BIN_NAME"
+echo "🔎 Try running: treego --help"
