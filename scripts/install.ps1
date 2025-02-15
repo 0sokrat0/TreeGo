@@ -1,47 +1,73 @@
 $BIN_NAME = "treego.exe"
-$INSTALL_DIR = "$env:USERPROFILE\bin"
+$INSTALL_DIR = Join-Path $env:USERPROFILE "bin"
 $URL = "https://github.com/0sokrat0/TreeGo/releases/latest/download/treego-windows-amd64.exe"
 
-Write-Host "🚀 Installing TreeGo..."
+Write-Host "🚀 Starting TreeGo installation..."
 
-# Проверяем наличие curl (если нет, используем Invoke-WebRequest)
-if (Get-Command curl -ErrorAction SilentlyContinue) {
-    curl -L -o $BIN_NAME $URL
-} else {
-    Invoke-WebRequest -Uri $URL -OutFile $BIN_NAME
+# Создаем папку назначения, если не существует
+if (-not (Test-Path -Path $INSTALL_DIR)) {
+    New-Item -ItemType Directory -Path $INSTALL_DIR -Force | Out-Null
+    Write-Host "📁 Created installation directory: $INSTALL_DIR"
 }
 
-# Проверяем, скачался ли файл
-if (!(Test-Path $BIN_NAME)) {
-    Write-Host "❌ Download failed! Check your internet connection or try again later."
+# Скачиваем бинарник
+$tempFile = Join-Path $env:TEMP $BIN_NAME
+try {
+    Write-Host "⏳ Downloading latest release..."
+    if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
+        curl.exe -L -s -o $tempFile $URL
+    }
+    else {
+        Invoke-WebRequest -Uri $URL -OutFile $tempFile -UseBasicParsing
+    }
+    
+    if (-not (Test-Path -Path $tempFile)) {
+        throw "Download failed"
+    }
+}
+catch {
+    Write-Host "❌ Error downloading binary: $_"
     exit 1
 }
 
-# Создаём папку bin, если её нет
-if (!(Test-Path -Path $INSTALL_DIR)) {
-    New-Item -ItemType Directory -Path $INSTALL_DIR -Force | Out-Null
+# Устанавливаем бинарник
+try {
+    Move-Item -Path $tempFile -Destination (Join-Path $INSTALL_DIR $BIN_NAME) -Force
+    Write-Host "✅ Binary installed to: $(Join-Path $INSTALL_DIR $BIN_NAME)"
+}
+catch {
+    Write-Host "❌ Error moving binary: $_"
+    exit 1
 }
 
-# Перемещаем бинарник
-Move-Item -Path $BIN_NAME -Destination "$INSTALL_DIR\$BIN_NAME" -Force
-
-Write-Host "✅ Installed in: $INSTALL_DIR\$BIN_NAME"
-
-# Добавляем в PATH (если нет)
-$ENV_PATH = [System.Environment]::GetEnvironmentVariable("Path", "User")
-if ($ENV_PATH -notlike "*$INSTALL_DIR*") {
-    [System.Environment]::SetEnvironmentVariable("Path", "$INSTALL_DIR;$ENV_PATH", "User")
-    Write-Host "✅ Added to PATH: $INSTALL_DIR"
-    
-    # Применяем изменения в PATH сразу, без перезапуска
-    $env:Path += ";$INSTALL_DIR"
-} else {
-    Write-Host "✅ Already in PATH: $INSTALL_DIR"
+# Добавляем в PATH
+$currentPath = [Environment]::GetEnvironmentVariable('Path', 'User')
+if ($currentPath -split ';' -notcontains $INSTALL_DIR) {
+    try {
+        [Environment]::SetEnvironmentVariable('Path', "$INSTALL_DIR;$currentPath", 'User')
+        Write-Host "🔧 Added to PATH: $INSTALL_DIR"
+        # Обновляем PATH для текущей сессии
+        $env:Path = "$INSTALL_DIR;" + $env:Path
+    }
+    catch {
+        Write-Host "❌ Failed to update PATH: $_"
+        exit 1
+    }
+}
+else {
+    Write-Host "ℹ️ Installation directory already in PATH"
 }
 
-# Проверяем, работает ли treego
-if (Get-Command treego -ErrorAction SilentlyContinue) {
-    Write-Host "🎉 Installation successful! Run 'treego --help' to test."
-} else {
-    Write-Host "⚠️ Installation completed, but you may need to restart PowerShell to apply changes."
+# Финальная проверка
+try {
+    $version = & (Join-Path $INSTALL_DIR $BIN_NAME) --version
+    Write-Host "🎉 Successfully installed TreeGo $version"
+    Write-Host "`nUsage example:"
+    Write-Host "  treego --help"
+    Write-Host "  treego ./your-project"
+}
+catch {
+    Write-Host "⚠️ Installation complete but verification failed!"
+    Write-Host "Please try restarting your terminal or run:"
+    Write-Host "  $((Join-Path $INSTALL_DIR $BIN_NAME)) --help"
 }
