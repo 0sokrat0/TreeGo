@@ -4,16 +4,13 @@ $URL = "https://github.com/0sokrat0/TreeGo/releases/latest/download/treego-windo
 
 Write-Host "🚀 Starting TreeGo installation..."
 
-# Создаем папку назначения, если не существует
 if (-not (Test-Path -Path $INSTALL_DIR)) {
     New-Item -ItemType Directory -Path $INSTALL_DIR -Force | Out-Null
     Write-Host "📁 Created installation directory: $INSTALL_DIR"
 }
 
-# Временный файл для скачивания
 $tempFile = Join-Path $env:TEMP $BIN_NAME
 
-# Скачиваем бинарник
 try {
     Write-Host "⏳ Downloading latest release..."
     if (Get-Command curl.exe -ErrorAction SilentlyContinue) {
@@ -33,7 +30,6 @@ catch {
     exit 1
 }
 
-# Устанавливаем бинарник
 try {
     Move-Item -Path $tempFile -Destination (Join-Path $INSTALL_DIR $BIN_NAME) -Force
     Write-Host "✅ Binary installed to: $(Join-Path $INSTALL_DIR $BIN_NAME)"
@@ -43,13 +39,11 @@ catch {
     exit 1
 }
 
-# Добавляем в PATH
 $currentPath = [Environment]::GetEnvironmentVariable('Path', 'User')
 if ($currentPath -split ';' -notcontains $INSTALL_DIR) {
     try {
         [Environment]::SetEnvironmentVariable('Path', "$INSTALL_DIR;$currentPath", 'User')
         Write-Host "🔧 Added to PATH: $INSTALL_DIR"
-        # Обновляем PATH для текущей сессии
         $env:Path = "$INSTALL_DIR;" + $env:Path
     }
     catch {
@@ -61,7 +55,6 @@ else {
     Write-Host "ℹ️ Installation directory already in PATH"
 }
 
-# Финальная проверка установки
 try {
     $version = & (Join-Path $INSTALL_DIR $BIN_NAME) --version
     Write-Host "🎉 Successfully installed TreeGo $version"

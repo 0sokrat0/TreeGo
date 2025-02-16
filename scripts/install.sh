@@ -8,7 +8,6 @@ REPO_URL="https://github.com/0sokrat0/TreeGo"
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)
 
-# Преобразование архитектуры
 if [[ "$ARCH" == "x86_64" ]]; then
     ARCH="amd64"
 elif [[ "$ARCH" == "aarch64" || "$ARCH" == "armv8" ]]; then
