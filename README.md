@@ -41,12 +41,44 @@ Run this command based on your OS:
 ```sh
 curl -fsSL https://raw.githubusercontent.com/0sokrat0/TreeGo/master/scripts/install.sh | bash
 ```
+### ✅ **Обновлённая инструкция для установки GoTree на Windows (README)**  
+Теперь установка **максимально простая** 🚀  
 
-#### **Windows (PowerShell):**
+---
+
+## ⚙️ **Installation (Windows)**
+### **1️⃣ Automatic Installation (PowerShell)**
+Simply run this command in **PowerShell (as Administrator)**:
 ```powershell
-irm https://raw.githubusercontent.com/0sokrat0/TreeGo/master/scripts/install.ps1 | iex
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest "https://github.com/0sokrat0/TreeGo/releases/latest/download/treego-windows-amd64.exe" -OutFile "$env:USERPROFILE\bin\treego.exe"
+$env:Path += ";$env:USERPROFILE\bin"
+```
+✅ **Now test it:**
+```powershell
+treego --help
+```
+🚀 **GoTree is installed!** 🎉  
+
+---
+
+### **2️⃣ Manual Installation (If PowerShell doesn’t work)**  
+1️⃣ **Go to [GoTree Releases](https://github.com/0sokrat0/TreeGo/releases/latest)**  
+2️⃣ **Download** `treego-windows-amd64.exe`  
+3️⃣ **Rename it to `treego.exe`**  
+4️⃣ **Move it to** `C:\Users\YourUser\bin`  
+5️⃣ **If the command doesn't work, add to PATH:**
+```powershell
+[System.Environment]::SetEnvironmentVariable("Path", "$env:USERPROFILE\bin;$env:Path", "User")
+```
+6️⃣ **Try again:**
+```powershell
+treego --help
 ```
 
+---
+
+✅ **Now the Windows installation is as easy as Linux!** 🚀🎉
 📌 This automatically downloads and installs the correct binary for your OS.
 
 ---
