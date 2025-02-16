@@ -1,4 +1,4 @@
-# 🌳 GoTree
+## 🌳 **GoTree**
 
 [![Go Version](https://img.shields.io/badge/Go-1.21%2B-blue)](https://golang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -23,53 +23,75 @@
 
 **Requirements**: `Go 1.21+`
 
-### 1️⃣ Install via Go:
-
+### 🏗️ **1. Install via Go (recommended)**
 ```sh
 go install github.com/0sokrat0/TreeGo@latest
 ```
+📌 This installs the latest version directly from the source.
 
-### 2️⃣ Install from pre-built binaries:
-
-#### 🐧 Linux:
-
-```sh
-wget https://github.com/0sokrat0/TreeGo/releases/latest/download/treego-linux-amd64 -O treego
-chmod +x treego
-sudo mv treego /usr/local/bin/
-```
-
-#### 🍏 macOS:
-
-```sh
-curl -L https://github.com/0sokrat0/TreeGo/releases/latest/download/treego-macos-amd64 -o treego
-chmod +x treego
-sudo mv treego /usr/local/bin/
-```
-
-#### 🖥️ Windows:
-
-
-##### PowerShell
-```ps
-irm https://github.com/0sokrat0/TreeGo/blob/master/scripts/install.ps1 | iex
-```
 ---
 
-## 🚀 Usage
+### 💾 **2. Install from pre-built binaries**  
+If you don’t have Go installed, download a pre-built binary:
+
+#### 🖥️ **Automatic Installation**
+Run this command based on your OS:
+
+#### **Linux/macOS:**
+```sh
+curl -fsSL https://raw.githubusercontent.com/0sokrat0/TreeGo/master/scripts/install.sh | bash
+```
+
+#### **Windows (PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/0sokrat0/TreeGo/master/scripts/install.ps1 | iex
+```
+
+📌 This automatically downloads and installs the correct binary for your OS.
+
+---
+
+### 📂 **3. Manual Installation**
+If the automatic script doesn't work, follow these steps:
+
+1️⃣ **Go to the [latest release](https://github.com/0sokrat0/TreeGo/releases/latest)**  
+2️⃣ **Download the correct binary for your OS:**
+   - **Linux:** `treego-linux-amd64`
+   - **macOS (Apple Silicon):** `treego-macos-arm64`
+   - **Windows:** `treego-windows-amd64.exe`
+3️⃣ **Move the file to a system-wide location:**  
+   - Linux/macOS: `/usr/local/bin/`
+   - Windows: `C:\Users\YourUser\bin\`
+4️⃣ **Make it executable (Linux/macOS only):**
+   ```sh
+   chmod +x treego
+   ```
+5️⃣ **Add to PATH if necessary**  
+   - **Windows:**
+     ```powershell
+     [System.Environment]::SetEnvironmentVariable("Path", "$env:USERPROFILE\bin;$env:Path", "User")
+     ```
+   - **Linux/macOS:**  
+     Add this to `~/.bashrc` or `~/.zshrc`:
+     ```sh
+     export PATH=$HOME/bin:$PATH
+     ```
+
+---
+
+## 🚀 **Usage**
 
 ```sh
 treego [options]
 ```
 
-### 🔹 Examples:
+### 🔹 **Examples**
 ```sh
 treego -hidden   # Show hidden files
 treego -depth=3  # Limit depth to 3 levels
 ```
 
-### 📌 Sample Output:
-
+### 📌 **Sample Output**
 ```
 📁 project
  ├── 📁 src
@@ -82,13 +104,13 @@ treego -depth=3  # Limit depth to 3 levels
 
 ---
 
-## 📚 Dependencies
-
+## 📚 **Dependencies**
 - [`fatih/color`](https://github.com/fatih/color) — Colored terminal output
 
 ---
 
-## 🔗 Contacts
-
+## 🔗 **Contacts**
 📬 **Author**: [@SOKRAT_00](https://t.me/SOKRAT_00)  
 📂 **Source Code**: [GitHub](https://github.com/0sokrat0/TreeGo)
+
+---
